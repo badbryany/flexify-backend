@@ -168,7 +168,7 @@ app.post(`${apiPrefix}/uploadProfilePicture`, async (req, res) => {
 	image.mv(dir)
 	
 	await query('UPDATE accounts SET profilepicture_path=$1 WHERE a_id=$2;', [dir, readToken(req.body.jwt).a_id])
-y
+
 	res.end('done')
 })
 
