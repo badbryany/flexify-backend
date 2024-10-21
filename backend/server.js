@@ -112,7 +112,7 @@ app.post(`${apiPrefix}/signin`, (req, res) => {
 
     var sql = 'SELECT a_id, firstname, email, password FROM accounts WHERE username=$1;';
 
-    query(sql, [req.body.username.toLowerCase()]).then(result => {
+    query(sql, [req.body.username.trim().toLowerCase()]).then(result => {
         if (result.length === 1) {
             validatePassword(req.body.password, result[0][3]).then((valid) => {
                 if (valid) {
@@ -223,7 +223,7 @@ app.get(`${apiPrefix}/getExercises`, async (req, res) => {
         res.end('jwt not valid')
         return
     }
-    var result = await query("SELECT * FROM exercises WHERE a_id=$1;", [readToken(req.query.jwt).a_id])
+    var result = await query("SELECT title, type, affectedMuscles, equipment FROM exercises WHERE a_id=$1;", [readToken(req.query.jwt).a_id])
 
     res.end(JSON.stringify(result));
 })
