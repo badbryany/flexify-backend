@@ -138,7 +138,7 @@ app.post(`${apiPrefix}/signup`, async (req, res) => {
         return;
     }
 
-    var result = await query('SELECT a_id FROM accounts WHERE username=$1;', [req.body.username])
+    var result = await query('SELECT a_id FROM accounts WHERE username=$1;', [req.body.username.toLowerCase()])
 
     if (result.length != 0) {
         res.end('username already taken')
@@ -150,7 +150,7 @@ app.post(`${apiPrefix}/signup`, async (req, res) => {
         return
     } */
 
-    var a_id = (await query('INSERT INTO accounts (username, email, firstname, surname, password) VALUES ($1,$2,$3,$4, $5) RETURNING a_id;', [req.body.username, req.body.email, req.body.firstname, req.body.surname, await hash(req.body.password)]))[0][0]
+    var a_id = (await query('INSERT INTO accounts (username, email, firstname, surname, password) VALUES ($1,$2,$3,$4, $5) RETURNING a_id;', [req.body.username.toLowerCase(), req.body.email, req.body.firstname, req.body.surname, await hash(req.body.password)]))[0][0]
 
     res.end(generateToken(a_id))
 })
@@ -304,7 +304,7 @@ app.post(`${apiPrefix}/sendFriendshipRequest`, async (req, res) => {
         return
     }
 
-    var send_id = (await query('SELECT a_id FROM accounts WHERE username LIKE $1;', [req.body.username]))[0][0]
+    var send_id = (await query('SELECT a_id FROM accounts WHERE username LIKE $1;', [req.body.username.toLowerCase()]))[0][0]
     var result = await query('SELECT * FROM friendship_requests WHERE requester_id=$1 AND send_id=$2;', [readToken(req.body.jwt).a_id, send_id])
     if (result.length !== 1) {
         await query('INSERT INTO friendship_requests (requester_id, send_id) VALUES ($1, $2);', [readToken(req.body.jwt).a_id, send_id])
@@ -428,13 +428,13 @@ app.post(`${apiPrefix}/editAccount`, async (req, res) => {
         return
     }
 
-    var result = await query('SELECT a_id FROM accounts WHERE username=$1;', [req.body.username])
+    var result = await query('SELECT a_id FROM accounts WHERE username=$1;', [req.body.username.toLowerCase()])
 
     if (result.length != 0 && result[0][0] != readToken(req.body.jwt).a_id) {
         res.end('username already taken')
         return
     }
 
-    await query("UPDATE accounts SET username=$1, email=$2, firstname=$3 WHERE a_id=$4;", [req.body.username, req.body.email, req.body.firstname, readToken(req.body.jwt).a_id])
+    await query("UPDATE accounts SET username=$1, email=$2, firstname=$3 WHERE a_id=$4;", [req.body.username.toLowerCase(), req.body.email, req.body.firstname, readToken(req.body.jwt).a_id])
     res.end('done')
 })
