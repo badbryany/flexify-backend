@@ -273,7 +273,7 @@ app.get(`${apiPrefix}/getSets`, async (req, res) => {
         res.end('jwt not valid')
         return
     }
-    var result = await query("SELECT exerciseName, reps, weight, date, duration, isBodyWeight, isDuration FROM sets WHERE a_id=$1;", [readToken(req.query.jwt).a_id])
+    var result = await query("SELECT s_id, exerciseName, reps, weight, date, duration, isBodyWeight, isDuration FROM sets WHERE a_id=$1;", [readToken(req.query.jwt).a_id])
 
     res.end(JSON.stringify(result));
 })
