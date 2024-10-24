@@ -27,7 +27,7 @@ app.get(`${apiPrefix}/`, async (req, res) => { res.end('flexify backend') })
 app.post(`${apiPrefix}/signin`, authController.signIn);
 app.post(`${apiPrefix}/signup`, authController.signUp);
 
-app.get(`${apiPrefix}/uploadProfilePicture`, authenticate, userModel.uploadProfilePicture);
+app.post(`${apiPrefix}/uploadProfilePicture`, authenticate, userModel.uploadProfilePicture);
 app.post(`${apiPrefix}/editAccount`, authenticate, userModel.editAccount);
 
 app.get(`${apiPrefix}/searchExercises`, searchController.searchExercises);

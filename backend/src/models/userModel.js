@@ -17,7 +17,7 @@ async function uploadProfilePicture(req, res) {
 async function editAccount(req, res) {
 	const { username, email, firstname } = req.body
 
-    if (!username, !email, !firstname) return res.status(400).send('Missing username or email or firstname')
+    if (!username || !email || !firstname) return res.status(400).send('Missing username or email or firstname')
 
     var result = await query('SELECT a_id FROM accounts WHERE username=$1;', [username.toLowerCase()])
 
