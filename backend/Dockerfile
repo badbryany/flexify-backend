@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["pm2-runtime", "start", "server.js"]
+CMD ["pm2-runtime", "start", "src/app.js"]
